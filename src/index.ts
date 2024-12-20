@@ -8,11 +8,11 @@ const app = express();
 // Middleware to parse JSON
 app.use(express.json());
 
-// Registering the routes
+// Routes mounting
 app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
 
-// Starting the server
+// server start-up
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
