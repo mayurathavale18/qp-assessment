@@ -1,0 +1,34 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: /bin/sh -c "echo 'Waiting for database...'; ./scripts/wait-for-it.sh database:5432 -- echo 'Database is ready!'; ts-node ./src/index.ts"
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=groceryDB
+    depends_on:
+      - database
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  database:
+    image: postgres:16
+    container_name: postgres_grocery
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: groceryDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:  
